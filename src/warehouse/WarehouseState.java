@@ -15,11 +15,12 @@ public class WarehouseState extends State implements Cloneable {
     private int steps;
 
     public WarehouseState(int[][] matrix) {
-        this.matrix = matrix.clone();
+        this.matrix = new int[matrix.length][matrix.length];
         this.steps = 0;
 
         for (int i = 0; i < this.matrix.length; i++) {
             for (int j = 0; j < this.matrix.length; j++) {
+                this.matrix[i][j] = matrix[i][j];
                 if (this.matrix[i][j] == Properties.AGENT)
                 {
                     this.lineExit = i;
@@ -83,19 +84,19 @@ public class WarehouseState extends State implements Cloneable {
     }
 
     public void moveUp() {
-        this.setCellAgent(this.lineAgent--, this.columnAgent);
+        this.setCellAgent(--this.lineAgent, this.columnAgent);
     }
 
     public void moveRight() {
-        this.setCellAgent(this.lineAgent, this.columnAgent++);
+        this.setCellAgent(this.lineAgent, ++this.columnAgent);
     }
 
     public void moveDown() {
-        this.setCellAgent(this.lineAgent++, this.columnAgent);
+        this.setCellAgent(++this.lineAgent, this.columnAgent);
     }
 
     public void moveLeft() {
-        this.setCellAgent(this.lineAgent, this.columnAgent--);
+        this.setCellAgent(this.lineAgent, --this.columnAgent);
     }
 
     public void setCellAgent(int line, int column) {
@@ -187,7 +188,13 @@ public class WarehouseState extends State implements Cloneable {
 
     @Override
     public WarehouseState clone() {
-    	return new WarehouseState(matrix);
+    	WarehouseState clone = new WarehouseState(matrix);
+    	clone.steps=this.steps;
+        clone.columnAgent=this.columnAgent;
+        clone.lineAgent=this.lineAgent;
+        clone.columnExit=this.columnExit;
+        clone.lineExit=this.lineExit;
+        return  clone;
     }
 
     private final ArrayList<EnvironmentListener> listeners = new ArrayList<>();
