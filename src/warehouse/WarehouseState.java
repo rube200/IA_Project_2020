@@ -27,7 +27,6 @@ public class WarehouseState extends State implements Cloneable {
                     this.columnExit = j;
                     this.lineAgent = i;
                     this.columnAgent = j;
-                    break;
                 }
             }
         }
@@ -84,23 +83,25 @@ public class WarehouseState extends State implements Cloneable {
     }
 
     public void moveUp() {
-        this.setCellAgent(--this.lineAgent, this.columnAgent);
+        this.setCellAgent(this.lineAgent - 1, this.columnAgent);
     }
 
     public void moveRight() {
-        this.setCellAgent(this.lineAgent, ++this.columnAgent);
+        this.setCellAgent(this.lineAgent, this.columnAgent + 1);
     }
 
     public void moveDown() {
-        this.setCellAgent(++this.lineAgent, this.columnAgent);
+        this.setCellAgent(this.lineAgent + 1, this.columnAgent);
     }
 
-    public void moveLeft() {
-        this.setCellAgent(this.lineAgent, --this.columnAgent);
+    public void moveLeft() { this.setCellAgent(this.lineAgent, this.columnAgent - 1);
     }
 
     public void setCellAgent(int line, int column) {
-    	this.matrix[this.lineAgent][this.columnAgent] = Properties.EMPTY;
+        if (line != this.lineExit || column != this.columnExit)
+    	    this.matrix[this.lineAgent][this.columnAgent] = Properties.EMPTY;
+
+
         this.lineAgent = line;
         this.columnAgent = column;
         this.matrix[line][column] = Properties.AGENT;
@@ -188,13 +189,11 @@ public class WarehouseState extends State implements Cloneable {
 
     @Override
     public WarehouseState clone() {
-    	WarehouseState clone = new WarehouseState(matrix);
-    	clone.steps=this.steps;
-        clone.columnAgent=this.columnAgent;
-        clone.lineAgent=this.lineAgent;
-        clone.columnExit=this.columnExit;
-        clone.lineExit=this.lineExit;
-        return  clone;
+    	WarehouseState newWarehouseState = new WarehouseState(matrix);
+        newWarehouseState.setSteps(this.steps);
+        newWarehouseState.lineExit = this.lineExit;
+        newWarehouseState.columnExit = this.columnExit;
+        return  newWarehouseState;
     }
 
     private final ArrayList<EnvironmentListener> listeners = new ArrayList<>();
