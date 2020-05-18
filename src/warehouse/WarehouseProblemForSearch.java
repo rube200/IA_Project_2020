@@ -1,58 +1,59 @@
 package warehouse;
 
+import agentSearch.Action;
 import agentSearch.Problem;
 
 import java.util.LinkedList;
 import java.util.List;
 
 public class WarehouseProblemForSearch<S extends WarehouseState> extends Problem<S> {
-    private Cell goal;
+    private Cell goalPosition;
+    private LinkedList<Action> possibleActions;
+
 
     public WarehouseProblemForSearch(S initialWarehouseState, Cell goalPosition) {
         super(initialWarehouseState);
-        this.goal = goalPosition;
+        this.goalPosition = goalPosition;
+
+        this.possibleActions = new LinkedList<>();
+        this.possibleActions.add(new ActionUp());
+        this.possibleActions.add(new ActionDown());
+        this.possibleActions.add(new ActionLeft());
+        this.possibleActions.add(new ActionRight());
     }
 
     @Override
     public List<S> executeActions(S state) {
-        List<S> actions = new LinkedList<S>();
+        List<S> successors = new LinkedList<>();
 
 
-        if (state.canMoveUp())
+        for (Action action : possibleActions) 
         {
-            S upState = (S)state.clone();
-            upState.moveUp();
-            actions.add(upState);
+            if(action.isValid(state))
+            {
+                S successor = (S)state.clone();
+                action.execute(successor);
+                successors.add(successor);
+            }
         }
 
 
-        if (state.canMoveDown())
-        {
-            S upState = (S)state.clone();
-            upState.moveDown();
-            actions.add(upState);
-        }
-
-
-        if (state.canMoveLeft())
-        {
-            S upState = (S)state.clone();
-            upState.moveLeft();
-            actions.add(upState);
-        }
-
-
-        if (state.canMoveRight())
-        {
-            S upState = (S)state.clone();
-            upState.moveRight();
-            actions.add(upState);
-        }
-
-        return actions;//TODO something wrong
+        return successors;
     }
 
     public boolean isGoal(S state) {
-        return this.goal.getLine() == state.getLineAgent() && this.goal.getColumn() == state.getColumnAgent();
+        byte compessator = 1;
+        if (this.goalPosition.getLine() == state.getLineExit() && this.goalPosition.getColumn() == state.getColumnExit())
+            compessator = 0;
+
+        return state.getLineAgent() == this.goalPosition.getLine() && state.getColumnAgent() == this.goalPosition.getColumn() + compessator;
+    }
+
+    public int getGoalLine(){
+        return this.goalPosition.getLine();
+    }
+
+    public int getGoalColumn(){
+        return this.goalPosition.getColumn();
     }
 }

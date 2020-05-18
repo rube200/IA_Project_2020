@@ -15,12 +15,12 @@ public class WarehouseState extends State implements Cloneable {
     private int steps;
 
     public WarehouseState(int[][] matrix) {
-        this.matrix = matrix;
+        this.matrix = matrix.clone();
         this.steps = 0;
 
         for (int i = 0; i < this.matrix.length; i++) {
             for (int j = 0; j < this.matrix.length; j++) {
-                if (this.matrix[i][j] == 1)
+                if (this.matrix[i][j] == Properties.AGENT)
                 {
                     this.lineExit = i;
                     this.columnExit = j;
@@ -34,16 +34,11 @@ public class WarehouseState extends State implements Cloneable {
 
     public void executeAction(Action action) {
         action.execute(this);
-        //TODO
-        throw new UnsupportedOperationException("Not implemented yet."); // delete after implementing
     }
 
     public void executeActionSimulation(Action action) {
         action.execute(this);
-        // TODO
-
         fireUpdatedEnvironment();
-        throw new UnsupportedOperationException("Not implemented yet."); // delete after implementing
     }
 
 
@@ -51,7 +46,7 @@ public class WarehouseState extends State implements Cloneable {
         if (this.lineAgent <= 0)
             return false;
 
-        if (this.matrix[this.lineAgent - 1][this.columnAgent] > 1)
+        if (this.matrix[this.lineAgent - 1][this.columnAgent] == Properties.SHELF)
             return false;
 
         return true;
@@ -61,7 +56,7 @@ public class WarehouseState extends State implements Cloneable {
         if (this.columnAgent + 1 >= this.matrix.length)
             return false;
 
-        if (this.matrix[this.lineAgent][this.columnAgent + 1] > 1)
+        if (this.matrix[this.lineAgent][this.columnAgent + 1] == Properties.SHELF)
             return false;
 
         return true;
@@ -71,7 +66,7 @@ public class WarehouseState extends State implements Cloneable {
         if (this.lineAgent + 1 >= this.matrix.length)
             return false;
 
-        if (this.matrix[this.lineAgent + 1][this.columnAgent] > 1)
+        if (this.matrix[this.lineAgent + 1][this.columnAgent] == Properties.SHELF)
             return false;
 
         return true;
@@ -81,32 +76,35 @@ public class WarehouseState extends State implements Cloneable {
         if (this.columnAgent <= 0)
             return false;
 
-        if (this.matrix[this.lineAgent][this.columnAgent - 1] > 1)
+        if (this.matrix[this.lineAgent][this.columnAgent - 1] == Properties.SHELF)
             return false;
 
         return true;
     }
 
     public void moveUp() {
-        this.lineAgent--;
+        this.setCellAgent(this.lineAgent--, this.columnAgent);
     }
 
     public void moveRight() {
-        this.columnAgent++;
+        this.setCellAgent(this.lineAgent, this.columnAgent++);
     }
 
     public void moveDown() {
-        this.lineAgent++;
+        this.setCellAgent(this.lineAgent++, this.columnAgent);
     }
 
     public void moveLeft() {
-        this.columnAgent--;
+        this.setCellAgent(this.lineAgent, this.columnAgent--);
     }
 
     public void setCellAgent(int line, int column) {
+    	this.matrix[this.lineAgent][this.columnAgent] = Properties.EMPTY;
         this.lineAgent = line;
         this.columnAgent = column;
+        this.matrix[line][column] = Properties.AGENT;
     }
+
 
     public int getSteps() {
         return steps;
@@ -139,11 +137,19 @@ public class WarehouseState extends State implements Cloneable {
     }
 
     public int getLineAgent() {
-        return lineAgent;
+        return this.lineAgent;
     }
 
     public int getColumnAgent() {
-        return columnAgent;
+        return this.columnAgent;
+    }
+
+    public int getLineExit() {
+        return this.lineExit;
+    }
+
+    public int getColumnExit() {
+        return this.columnExit;
     }
 
     @Override
@@ -181,9 +187,7 @@ public class WarehouseState extends State implements Cloneable {
 
     @Override
     public WarehouseState clone() {
-        WarehouseState warehouse = new WarehouseState(matrix.clone());//TODO verificar
-        warehouse.setCellAgent(this.lineAgent, this.columnAgent);
-        return warehouse;
+    	return new WarehouseState(matrix);
     }
 
     private final ArrayList<EnvironmentListener> listeners = new ArrayList<>();
