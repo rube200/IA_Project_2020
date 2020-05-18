@@ -236,8 +236,6 @@ public class MainFrame extends JFrame implements GAListener {
                             WarehouseProblemForSearch problem = new WarehouseProblemForSearch(state, p.getCell2());
                             Solution s = agentSearch.solveProblem(problem);
                             p.setValue((int) s.getCost());
-
-
                         }
                         problemGA = new WarehouseProblemForGA(agentSearch);
 

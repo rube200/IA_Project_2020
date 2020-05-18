@@ -25,14 +25,13 @@ public class WarehouseProblemForSearch<S extends WarehouseState> extends Problem
     @Override
     public List<S> executeActions(S state) {
         List<S> successors = new LinkedList<>();
-
-
+//TODO bugs here
         for (Action action : possibleActions) 
         {
             if(action.isValid(state))
             {
                 S successor = (S)state.clone();
-                action.execute(successor);
+                action.execute(state);
                 successors.add(successor);
             }
         }
@@ -42,11 +41,11 @@ public class WarehouseProblemForSearch<S extends WarehouseState> extends Problem
     }
 
     public boolean isGoal(S state) {
-        byte compessator = 1;
+        byte compensator = 1;
         if (this.goalPosition.getLine() == state.getLineExit() && this.goalPosition.getColumn() == state.getColumnExit())
-            compessator = 0;
+            compensator = 0;
 
-        return state.getLineAgent() == this.goalPosition.getLine() && state.getColumnAgent() == this.goalPosition.getColumn() + compessator;
+        return state.getLineAgent() == this.goalPosition.getLine() && state.getColumnAgent() == this.goalPosition.getColumn() + compensator;
     }
 
     public int getGoalLine(){
