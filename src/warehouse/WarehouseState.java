@@ -8,9 +8,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class WarehouseState extends State implements Cloneable {
-
-    //TODO this class might require the definition of additional methods and/or attributes
-
     private int[][] matrix;
     private int lineAgent, columnAgent;
     private int lineExit;
@@ -18,13 +15,26 @@ public class WarehouseState extends State implements Cloneable {
     private int steps;
 
     public WarehouseState(int[][] matrix) {
-        //TODO
-        throw new UnsupportedOperationException("Not implemented yet.");
+        this.matrix = matrix;
+        this.steps = 0;
+
+        for (int i = 0; i < this.matrix.length; i++) {
+            for (int j = 0; j < this.matrix.length; j++) {
+                if (this.matrix[i][j] == 1)
+                {
+                    this.lineExit = i;
+                    this.columnExit = j;
+                    this.lineAgent = i;
+                    this.columnAgent = j;
+                    break;
+                }
+            }
+        }
     }
 
     public void executeAction(Action action) {
         action.execute(this);
-        // TODO
+        //TODO
         throw new UnsupportedOperationException("Not implemented yet."); // delete after implementing
     }
 
@@ -38,48 +48,64 @@ public class WarehouseState extends State implements Cloneable {
 
 
     public boolean canMoveUp() {
-        //TODO
-        throw new UnsupportedOperationException("Not implemented yet.");
+        if (this.lineAgent <= 0)
+            return false;
+
+        if (this.matrix[this.lineAgent - 1][this.columnAgent] > 1)
+            return false;
+
+        return true;
     }
 
     public boolean canMoveRight() {
-        //TODO
-        throw new UnsupportedOperationException("Not implemented yet.");
+        if (this.columnAgent + 1 >= this.matrix.length)
+            return false;
+
+        if (this.matrix[this.lineAgent][this.columnAgent + 1] > 1)
+            return false;
+
+        return true;
     }
 
     public boolean canMoveDown() {
-        //TODO
-        throw new UnsupportedOperationException("Not implemented yet.");
+        if (this.lineAgent + 1 >= this.matrix.length)
+            return false;
+
+        if (this.matrix[this.lineAgent + 1][this.columnAgent] > 1)
+            return false;
+
+        return true;
     }
 
     public boolean canMoveLeft() {
-        //TODO
-        throw new UnsupportedOperationException("Not implemented yet.");
+        if (this.columnAgent <= 0)
+            return false;
+
+        if (this.matrix[this.lineAgent][this.columnAgent - 1] > 1)
+            return false;
+
+        return true;
     }
 
     public void moveUp() {
-        //TODO
-        throw new UnsupportedOperationException("Not implemented yet.");
+        this.lineAgent--;
     }
 
     public void moveRight() {
-        //TODO
-        throw new UnsupportedOperationException("Not implemented yet.");
+        this.columnAgent++;
     }
 
     public void moveDown() {
-        //TODO
-        throw new UnsupportedOperationException("Not implemented yet.");
+        this.lineAgent++;
     }
 
     public void moveLeft() {
-        //TODO
-        throw new UnsupportedOperationException("Not implemented yet.");
+        this.columnAgent--;
     }
 
     public void setCellAgent(int line, int column) {
-        //TODO
-        throw new UnsupportedOperationException("Not implemented yet.");
+        this.lineAgent = line;
+        this.columnAgent = column;
     }
 
     public int getSteps() {
@@ -155,8 +181,9 @@ public class WarehouseState extends State implements Cloneable {
 
     @Override
     public WarehouseState clone() {
-        //TODO
-        throw new UnsupportedOperationException("Not implemented yet.");
+        WarehouseState warehouse = new WarehouseState(matrix.clone());//TODO verificar
+        warehouse.setCellAgent(this.lineAgent, this.columnAgent);
+        return warehouse;
     }
 
     private final ArrayList<EnvironmentListener> listeners = new ArrayList<>();
@@ -176,5 +203,4 @@ public class WarehouseState extends State implements Cloneable {
             listener.environmentUpdated();
         }
     }
-
 }
