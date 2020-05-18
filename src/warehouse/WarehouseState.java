@@ -11,6 +11,7 @@ public class WarehouseState extends State implements Cloneable {
 
     //TODO this class might require the definition of additional methods and/or attributes
 
+    //ref 8 puzzle state
     private int[][] matrix;
     private int lineAgent, columnAgent;
     private int lineExit;
@@ -18,69 +19,66 @@ public class WarehouseState extends State implements Cloneable {
     private int steps;
 
     public WarehouseState(int[][] matrix) {
-        //TODO
-        throw new UnsupportedOperationException("Not implemented yet.");
-    }
+        this.matrix = new int[matrix.length][matrix.length];
 
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix.length; j++) {
+                this.matrix[i][j] = matrix[i][j];
+                if (this.matrix[i][j] == 1) {
+                    lineExit = lineAgent = i;
+                    columnExit = columnAgent = j;
+                }
+            }
+        }
+    }
+    // vai ser preciso outro construtor para search2
     public void executeAction(Action action) {
         action.execute(this);
-        // TODO
-        throw new UnsupportedOperationException("Not implemented yet."); // delete after implementing
     }
 
     public void executeActionSimulation(Action action) {
         action.execute(this);
-        // TODO
-
         fireUpdatedEnvironment();
-        throw new UnsupportedOperationException("Not implemented yet."); // delete after implementing
     }
 
 
     public boolean canMoveUp() {
-        //TODO
-        throw new UnsupportedOperationException("Not implemented yet.");
+        return lineAgent != 0 && lineAgent-1!= Properties.SHELF;
     }
 
     public boolean canMoveRight() {
-        //TODO
-        throw new UnsupportedOperationException("Not implemented yet.");
+        return columnAgent != matrix.length - 1 && columnAgent+1!= Properties.SHELF;
     }
 
     public boolean canMoveDown() {
-        //TODO
-        throw new UnsupportedOperationException("Not implemented yet.");
+        return lineAgent != matrix.length - 1 && lineAgent + 1 != Properties.SHELF;
     }
 
     public boolean canMoveLeft() {
-        //TODO
-        throw new UnsupportedOperationException("Not implemented yet.");
-    }
+        return columnAgent != 0 && columnAgent-1!= Properties.SHELF;}
 
     public void moveUp() {
-        //TODO
-        throw new UnsupportedOperationException("Not implemented yet.");
+        setCellAgent(lineAgent--, columnAgent);
     }
 
     public void moveRight() {
-        //TODO
-        throw new UnsupportedOperationException("Not implemented yet.");
+        setCellAgent(lineAgent, columnAgent++);
     }
 
     public void moveDown() {
-        //TODO
-        throw new UnsupportedOperationException("Not implemented yet.");
+        setCellAgent(lineAgent++, columnAgent);
     }
 
     public void moveLeft() {
-        //TODO
-        throw new UnsupportedOperationException("Not implemented yet.");
+        setCellAgent(lineAgent, columnAgent--);
     }
 
     public void setCellAgent(int line, int column) {
-        //TODO
-        throw new UnsupportedOperationException("Not implemented yet.");
-    }
+        matrix[lineAgent][columnAgent]=0;
+        lineAgent=line;
+        columnAgent=column;
+        matrix[lineAgent][columnAgent]=1;
+        }
 
     public int getSteps() {
         return steps;
@@ -155,8 +153,13 @@ public class WarehouseState extends State implements Cloneable {
 
     @Override
     public WarehouseState clone() {
-        //TODO
-        throw new UnsupportedOperationException("Not implemented yet.");
+        WarehouseState clone = new WarehouseState(matrix);
+        clone.columnAgent = this.columnAgent;
+        clone.lineAgent = this.lineAgent;
+        clone.columnExit = this.columnExit;
+        clone.lineAgent = this.lineExit;
+
+        return clone;
     }
 
     private final ArrayList<EnvironmentListener> listeners = new ArrayList<>();
