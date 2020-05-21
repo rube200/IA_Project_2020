@@ -2,7 +2,6 @@ package warehouse;
 
 import ga.GeneticAlgorithm;
 import ga.IntVectorIndividual;
-
 import java.util.LinkedList;
 import java.util.List;
 
