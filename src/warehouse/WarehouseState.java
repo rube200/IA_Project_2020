@@ -98,7 +98,7 @@ public class WarehouseState extends State implements Cloneable {
     }
 
     public void setCellAgent(int line, int column) {
-        if (line != this.lineExit || column != this.columnExit)
+        if (lineAgent != this.lineExit || columnAgent != this.columnExit)
     	    this.matrix[this.lineAgent][this.columnAgent] = Properties.EMPTY;
 
 
@@ -193,6 +193,8 @@ public class WarehouseState extends State implements Cloneable {
         newWarehouseState.setSteps(this.steps);
         newWarehouseState.lineExit = this.lineExit;
         newWarehouseState.columnExit = this.columnExit;
+        newWarehouseState.lineAgent = this.lineAgent;
+        newWarehouseState.columnAgent = this.columnAgent;
         return  newWarehouseState;
     }
 
