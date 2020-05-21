@@ -1,7 +1,6 @@
 package ga;
 
 public abstract class IntVectorIndividual<P extends Problem, I extends IntVectorIndividual> extends Individual<P, I> {
-
     protected int[] genome;
 
     public IntVectorIndividual(P problem, int size) {

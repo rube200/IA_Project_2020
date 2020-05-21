@@ -1,9 +1,9 @@
 package gui;
 
 import agentSearch.Solution;
-import warehouse.WarehouseState;
 import warehouse.EnvironmentListener;
 import warehouse.Properties;
+import warehouse.WarehouseState;
 
 import javax.swing.*;
 import java.awt.*;
@@ -156,7 +156,7 @@ public class PanelSimulation extends JPanel implements EnvironmentListener {
         panelInformation.textFieldSteps.setText(Integer.toString(environment.getSteps()));
 
         try {
-            Thread.sleep(200);
+            Thread.sleep((long)Double.parseDouble(mainFrame.getPanelParameters().textFieldVelocity.getText()));
         } catch (InterruptedException ignore) {
         }
     }

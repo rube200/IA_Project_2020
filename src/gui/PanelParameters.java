@@ -21,6 +21,7 @@ public class PanelParameters extends PanelAtributesValue {
     public static final String TOURNAMENT_SIZE = "4";
     public static final String PROB_RECOMBINATION = "0.7";
     public static final String PROB_MUTATION = "0.2";
+    public static final String Velocity = "200";
     private MainFrame mainFrame;
     JTextField textFieldSeed = new JTextField(SEED, TEXT_FIELD_LENGHT);
     JTextField textFieldN = new JTextField(POPULATION_SIZE, TEXT_FIELD_LENGHT);
@@ -39,6 +40,9 @@ public class PanelParameters extends PanelAtributesValue {
 
     String[] methodsSearch = {"A*"};
     JComboBox comboBoxSearch = new JComboBox(methodsSearch);
+
+    JTextField textFieldVelocity = new JTextField(Velocity, TEXT_FIELD_LENGHT);
+
 
     JRadioButton rbElitism = new JRadioButton("", true);
 
@@ -82,6 +86,10 @@ public class PanelParameters extends PanelAtributesValue {
         labels.add(new JLabel("Search Methods: "));
         valueComponents.add(comboBoxSearch);
         comboBoxSearch.addActionListener(new JComboBoxSearch_ActionAdapter(this));
+
+        labels.add(new JLabel("Velocity (ms): "));
+        valueComponents.add(textFieldVelocity);
+        textFieldVelocity.addKeyListener(new IntegerTextField_KeyAdapter(null));
 
         mainFrame.manageButtons(false, false, false, false,false, false, false, false);
 

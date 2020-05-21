@@ -1,36 +1,101 @@
 package warehouse;
 
+import ga.GeneticAlgorithm;
 import ga.IntVectorIndividual;
 
+import java.util.LinkedList;
+import java.util.List;
+
 public class WarehouseIndividual extends IntVectorIndividual<WarehouseProblemForGA, WarehouseIndividual> {
-
-    //TODO this class might require the definition of additional methods and/or attributes
-
     public WarehouseIndividual(WarehouseProblemForGA problem, int size) {
         super(problem, size);
-        //TODO
-        throw new UnsupportedOperationException("Not implemented yet.");
+        for (int i = 0; i < genome.length; i++) {
+            boolean flag;
+            do {
+                flag = false;
+                genome[i] = GeneticAlgorithm.random.nextInt(size) + 1;
+                for (int j = 0; j < i; j++) {
+                    if (genome[i] == genome[j]) {
+                        flag = true;
+                        break;
+                    }
+                }
+            } while(flag);
+        }
     }
 
     public WarehouseIndividual(WarehouseIndividual original) {
         super(original);
     }
 
+    public static int getShelfPos(int[] genome, int value) {
+        for (int i = 0; i < genome.length; i++) {
+            if (genome[i] == value)
+                return i;
+        }
+
+        return -1;
+    }
+
     @Override
     public double computeFitness() {
-        //TODO
-        throw new UnsupportedOperationException("Not implemented yet.");
+        fitness = 0;
+        List<Request> requests = WarehouseAgentSearch.getRequests();
+        for (Request request : requests) {
+            int[] products = request.getRequest();
+            int lastIndex = products.length - 1;
+            for (int i = 0; i <= lastIndex; i++) {
+                int product = products[i];
+                if (i == 0) {
+                    fitness += distance(WarehouseAgentSearch.getCellAgent(), getShelfCell(product));
+                }
+
+
+                if (i == lastIndex) {
+                    fitness += distance(getShelfCell(product), WarehouseAgentSearch.getExit());
+                } else {
+                    fitness += distance(getShelfCell(product), getShelfCell(products[i + 1]));
+                }
+            }
+        }
+        return fitness;
     }
 
-    public static int getShelfPos(int[] genome, int value) {
-        //TODO
-        throw new UnsupportedOperationException("Not implemented yet.");
+    public int getProductInShelf(int line, int column) {
+        List<Cell> shelves = WarehouseAgentSearch.getShelves();
+        for (int i = 0; i < shelves.size(); i++) {
+            Cell shelf = shelves.get(i);
+            if (shelf.getLine() == line && shelf.getColumn() == column) {
+                if (i >= genome.length)
+                    return 0;
+
+                return genome[i];
+            }
+        }
+
+        return 0;
     }
 
-    //Return the product Id if the shelf in cell [line, column] has some product and 0 otherwise
-    public int getProductInShelf(int line, int column){
-        //TODO
-        throw new UnsupportedOperationException("Not implemented yet.");
+    public Cell getShelfCell(int product) {
+        return WarehouseAgentSearch.getShelves().get(getShelfPos(genome, product));
+    }
+
+    public double distance(Cell cell1, Cell cell2) {
+        LinkedList Pairs = problem.agentSearch.getPairs();
+        for (Object obj : Pairs) {
+            if (!(obj instanceof Pair))
+                continue;
+
+            Pair pair = (Pair) obj;
+            if (cell1.equals(pair.getCell1()) && cell2.equals(pair.getCell2()))
+                return pair.getValue();
+
+
+            if (cell1.equals(pair.getCell2()) && cell2.equals(pair.getCell1()))
+                return pair.getValue();
+        }
+
+        throw new IllegalArgumentException("Invalid cells");
     }
 
     @Override
@@ -54,12 +119,11 @@ public class WarehouseIndividual extends IntVectorIndividual<WarehouseProblemFor
      */
     @Override
     public int compareTo(WarehouseIndividual i) {
-        return (this.fitness == i.getFitness()) ? 0 : (this.fitness < i.getFitness()) ? 1 : -1;
+        return Double.compare(i.getFitness(), this.fitness);
     }
 
     @Override
     public WarehouseIndividual clone() {
         return new WarehouseIndividual(this);
-
     }
 }

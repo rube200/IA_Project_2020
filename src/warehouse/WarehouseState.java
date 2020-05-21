@@ -21,12 +21,11 @@ public class WarehouseState extends State implements Cloneable {
         for (int i = 0; i < this.matrix.length; i++) {
             for (int j = 0; j < this.matrix.length; j++) {
                 this.matrix[i][j] = matrix[i][j];
-                if (this.matrix[i][j] == Properties.AGENT)
-                {
-                    this.lineExit = i;
-                    this.columnExit = j;
+                if (this.matrix[i][j] == Properties.AGENT) {
                     this.lineAgent = i;
                     this.columnAgent = j;
+                    this.lineExit = i;
+                    this.columnExit = j;
                 }
             }
         }
@@ -46,30 +45,21 @@ public class WarehouseState extends State implements Cloneable {
         if (this.lineAgent <= 0)
             return false;
 
-        if (this.matrix[this.lineAgent - 1][this.columnAgent] == Properties.SHELF)
-            return false;
-
-        return true;
+        return this.matrix[this.lineAgent - 1][this.columnAgent] != Properties.SHELF;
     }
 
     public boolean canMoveRight() {
         if (this.columnAgent + 1 >= this.matrix.length)
             return false;
 
-        if (this.matrix[this.lineAgent][this.columnAgent + 1] == Properties.SHELF)
-            return false;
-
-        return true;
+        return this.matrix[this.lineAgent][this.columnAgent + 1] != Properties.SHELF;
     }
 
     public boolean canMoveDown() {
         if (this.lineAgent + 1 >= this.matrix.length)
             return false;
 
-        if (this.matrix[this.lineAgent + 1][this.columnAgent] == Properties.SHELF)
-            return false;
-
-        return true;
+        return this.matrix[this.lineAgent + 1][this.columnAgent] != Properties.SHELF;
     }
 
     public boolean canMoveLeft() {
@@ -84,27 +74,32 @@ public class WarehouseState extends State implements Cloneable {
 
     public void moveUp() {
         this.setCellAgent(this.lineAgent - 1, this.columnAgent);
+        this.steps++;
     }
 
     public void moveRight() {
         this.setCellAgent(this.lineAgent, this.columnAgent + 1);
+        this.steps++;
     }
 
     public void moveDown() {
         this.setCellAgent(this.lineAgent + 1, this.columnAgent);
+        this.steps++;
     }
 
-    public void moveLeft() { this.setCellAgent(this.lineAgent, this.columnAgent - 1);
+    public void moveLeft() {
+        this.setCellAgent(this.lineAgent, this.columnAgent - 1);
+        this.steps++;
     }
 
     public void setCellAgent(int line, int column) {
-        if (line != this.lineExit || column != this.columnExit)
-    	    this.matrix[this.lineAgent][this.columnAgent] = Properties.EMPTY;
+        if (this.lineAgent != this.lineExit || this.columnAgent != this.columnExit)
+            this.matrix[this.lineAgent][this.columnAgent] = Properties.EMPTY;
 
 
         this.lineAgent = line;
         this.columnAgent = column;
-        this.matrix[line][column] = Properties.AGENT;
+        this.matrix[this.lineAgent][this.columnAgent] = Properties.AGENT;
     }
 
 
@@ -177,10 +172,10 @@ public class WarehouseState extends State implements Cloneable {
     public String toString() {
         StringBuilder buffer = new StringBuilder();
         buffer.append(matrix.length);
-        for (int i = 0; i < matrix.length; i++) {
+        for (int[] ints : matrix) {
             buffer.append('\n');
             for (int j = 0; j < matrix.length; j++) {
-                buffer.append(matrix[i][j]);
+                buffer.append(ints[j]);
                 buffer.append(' ');
             }
         }
@@ -193,6 +188,7 @@ public class WarehouseState extends State implements Cloneable {
         newWarehouseState.setSteps(this.steps);
         newWarehouseState.lineExit = this.lineExit;
         newWarehouseState.columnExit = this.columnExit;
+        newWarehouseState.setCellAgent(this.lineAgent, this.columnAgent);
         return  newWarehouseState;
     }
 

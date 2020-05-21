@@ -5,20 +5,18 @@ import ga.Problem;
 import java.util.LinkedList;
 
 public class WarehouseProblemForGA implements Problem<WarehouseIndividual> {
+    protected WarehouseAgentSearch agentSearch;
     public WarehouseProblemForGA(WarehouseAgentSearch agentSearch) {
-
+        this.agentSearch = agentSearch;
     }
 
     @Override
     public WarehouseIndividual getNewIndividual() {
-        //TODO
-        throw new UnsupportedOperationException("Not implemented yet.");
+        return new WarehouseIndividual(this, WarehouseAgentSearch.getNumProducts());
     }
 
     @Override
     public String toString() {
-        //TODO
-        throw new UnsupportedOperationException("Not implemented yet.");
+        return "agentSearch: " + agentSearch.toString();
     }
-
 }
