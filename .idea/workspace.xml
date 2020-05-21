@@ -6,14 +6,8 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ac04bfec-7f60-42eb-9fae-b904b9702de2" name="Default" comment="Lasts things">
+    <list default="true" id="e0dab939-bd12-4c0d-844b-9d9bff87332e" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ga/IntVectorIndividual.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ga/IntVectorIndividual.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/gui/PanelParameters.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/gui/PanelParameters.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/gui/PanelSimulation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/gui/PanelSimulation.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/warehouse/WarehouseIndividual.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/warehouse/WarehouseIndividual.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/warehouse/WarehouseProblemForGA.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/warehouse/WarehouseProblemForGA.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/warehouse/WarehouseState.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/warehouse/WarehouseState.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -52,7 +46,7 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1554909134647" /
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1554909134647" />
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.15527344" />
     <property name="project.structure.side.proportion" value="0.2" />
@@ -94,7 +88,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType" factoryName="Kotlin script">
       <option name="filePath" />
       <option name="vmParameters" />
       <option name="alternativeJrePath" />
