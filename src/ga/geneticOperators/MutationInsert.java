@@ -17,11 +17,13 @@ public class MutationInsert<I extends IntVectorIndividual, P extends Problem<I>>
         do {
             cut2 = GeneticAlgorithm.random.nextInt(ind.getNumGenes());
         }while (cut1==cut2);
+
         if (cut1 > cut2) {
             int aux = cut1;
             cut1 = cut2;
             cut2 = aux;
         }
+
         for(int i = cut2-1; i > cut1 ; i--) {
             int aux = ind.getGene(i + 1);
             ind.setGene(i + 1, ind.getGene(i));

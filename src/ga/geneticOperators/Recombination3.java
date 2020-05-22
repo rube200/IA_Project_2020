@@ -15,8 +15,6 @@ public class Recombination3<I extends IntVectorIndividual, P extends Problem<I>>
         boolean startWithParent1 = GeneticAlgorithm.random.nextBoolean();
         int[] child1 = recombineParent(ind1, ind2, startWithParent1);
         int[] child2 = recombineParent(ind1, ind1, !startWithParent1);
-        System.out.println("end1 " + Arrays.toString(child1));
-        System.out.println("end1 " + Arrays.toString(child2));
 
         for (int i = 0; i < ind1.getNumGenes(); i++) {
             ind1.setGene(i, child1[i]);
