@@ -27,7 +27,6 @@ public class MutationInsert<I extends IntVectorIndividual, P extends Problem<I>>
             ind.setGene(i + 1, ind.getGene(i));
             ind.setGene(i, aux);
         }
-
     }
 
 

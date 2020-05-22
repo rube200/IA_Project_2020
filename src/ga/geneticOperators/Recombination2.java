@@ -32,9 +32,6 @@ public class Recombination2<I extends IntVectorIndividual, P extends Problem<I>>
             ind1.setGene(i, child1[i]);
             ind2.setGene(i, child2[i]);
         }
-
-        System.out.println(Arrays.toString(child1));
-        System.out.println(Arrays.toString(child2));
     }
 
     private int[] recombineParent(I ind1, I ind2, int cut1, int cut2)
