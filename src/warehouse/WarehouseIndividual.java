@@ -65,7 +65,7 @@ public class WarehouseIndividual extends IntVectorIndividual<WarehouseProblemFor
         for (int i = 0; i < shelves.size(); i++) {
             Cell shelf = shelves.get(i);
             if (shelf.getLine() == line && shelf.getColumn() == column) {
-                if (i >= genome.length)
+                if (genome[i] >= problem.agentSearch.getNumProducts())
                     return 0;
 
                 return genome[i];

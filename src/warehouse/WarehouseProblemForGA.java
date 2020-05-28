@@ -2,7 +2,6 @@ package warehouse;
 
 import ga.Problem;
 
-import java.util.LinkedList;
 
 public class WarehouseProblemForGA implements Problem<WarehouseIndividual> {
     protected WarehouseAgentSearch agentSearch;
@@ -12,7 +11,7 @@ public class WarehouseProblemForGA implements Problem<WarehouseIndividual> {
 
     @Override
     public WarehouseIndividual getNewIndividual() {
-        return new WarehouseIndividual(this, WarehouseAgentSearch.getNumProducts());
+        return new WarehouseIndividual(this, WarehouseAgentSearch.getShelves().size());
     }
 
     @Override
