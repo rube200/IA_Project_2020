@@ -323,7 +323,9 @@ public class MainFrame extends JFrame implements GAListener {
                             for (int i = 0; i <= r.getRequest().length; i++) {
                                 Cell cell;
                                 if (i != r.getRequest().length) {
-                                    cell = (Cell) agentSearch.getShelves().get(WarehouseIndividual.getShelfPos(genome, r.getRequest()[i]));
+                                    int requet = r.getRequest()[i];
+                                    cell = (Cell) agentSearch.getShelves().get(WarehouseIndividual.getShelfPos(genome, requet));
+                                    actionCatchProduct.add(requet);
 
                                 } else
                                     cell = agentSearch.getExit();

@@ -10,6 +10,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 
 public class PanelSimulation extends JPanel implements EnvironmentListener {
@@ -112,12 +113,20 @@ public class PanelSimulation extends JPanel implements EnvironmentListener {
                 BufferedImage.TYPE_INT_RGB);
     }
 
+    private int currentCatchIndex = 0;
+
+
     @Override
     public void environmentUpdated() {
 
         int n = environment.getSize();
         Graphics g = image.getGraphics();
         g.setFont(new Font("Arial", Font.PLAIN, 9));
+
+
+        ArrayList<Integer> catchs = mainFrame.getActionCatchProduct();
+        boolean isProductCatched = false;
+
 
         //Fill the cells color
         boolean hasProduct;
@@ -129,12 +138,24 @@ public class PanelSimulation extends JPanel implements EnvironmentListener {
                     int product = mainFrame.getBestInRun().getProductInShelf(y, x);
                     if (product != 0) {
                         hasProduct = true;
-                        g.setColor(Properties.COLORSHELFPRODUCT);
+                        boolean productCatchColor = false;
+                        if (catchs.size() != 0)
+                        {
+                            int currentCatch = catchs.get(currentCatchIndex);
+                            if (currentCatch == product && environment.getCellColor(y, x + 1) == Properties.COLORAGENT)
+                            {
+                                isProductCatched = true;
+                                productCatchColor = true;
+                            }
+                        }
+
+                        g.setColor(productCatchColor ? Properties.COLORSHELFPRODUCTCATCH: Properties.COLORSHELFPRODUCT);
                         g.fillRect(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
                         g.setColor(Color.BLACK);
                         g.drawString(Integer.toString(product), x * CELL_SIZE + 2, y * CELL_SIZE + CELL_SIZE - 2);
                     }
                 }
+
 
                 if (!hasProduct) {
                     g.setColor(color);
@@ -154,6 +175,15 @@ public class PanelSimulation extends JPanel implements EnvironmentListener {
         g.drawImage(image, GRID_TO_PANEL_GAP, GRID_TO_PANEL_GAP, null);
         panelInformation.textFieldRequests.setText(Integer.toString(numRequest));
         panelInformation.textFieldSteps.setText(Integer.toString(environment.getSteps()));
+
+
+        if (isProductCatched)
+        {
+            currentCatchIndex++;
+            if (catchs.size() <= currentCatchIndex)
+                currentCatchIndex = 0;
+        }
+
 
         try {
             Thread.sleep((long)Double.parseDouble(mainFrame.getPanelParameters().textFieldVelocity.getText()));
