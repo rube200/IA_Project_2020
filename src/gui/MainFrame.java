@@ -1,7 +1,6 @@
 package gui;
 
 import agentSearch.Solution;
-import warehouse.*;
 import experiments.Experiment;
 import experiments.ExperimentEvent;
 import ga.GAEvent;
@@ -13,6 +12,7 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
+import warehouse.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -20,8 +20,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.Random;
 
 public class MainFrame extends JFrame implements GAListener {
@@ -445,6 +446,13 @@ public class MainFrame extends JFrame implements GAListener {
             @Override
             public void done() {
                 manageButtons(true, problemGA != null, false, false, false, true, false, false);
+                try {
+                    Desktop.getDesktop().browse(new URI("https://youtu.be/GWXLPu8Ky9k")); //TODO DELETE
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                } catch (URISyntaxException uriSyntaxException) {
+                    uriSyntaxException.printStackTrace();
+                }
                 textFieldExperimentsStatus.setText("Finished");
             }
         };
