@@ -227,7 +227,7 @@ public class MainFrame extends JFrame implements GAListener {
                 public Void doInBackground() {
                     try
                     {
-                        RunSearch();
+                        RunSearch(agentSearch);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -422,7 +422,7 @@ public class MainFrame extends JFrame implements GAListener {
                     int[][] matrix = WarehouseAgentSearch.readInitialStateFromFile(new File(experimentsFactory.getFile()));
                     WarehouseAgentSearch agentSearch = new WarehouseAgentSearch(new WarehouseState(matrix));
 
-                    RunSearch();
+                    RunSearch(agentSearch);
 
                     while (experimentsFactory.hasMoreExperiments()) {
                         try {
@@ -449,7 +449,7 @@ public class MainFrame extends JFrame implements GAListener {
         worker.execute();
     }
 
-    private void RunSearch()
+    private void RunSearch(WarehouseAgentSearch agentSearch)
     {
         for (Object o : agentSearch.getPairs()) {
             if (!(o instanceof Pair))
