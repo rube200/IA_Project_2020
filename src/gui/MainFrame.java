@@ -225,21 +225,9 @@ public class MainFrame extends JFrame implements GAListener {
             worker = new SwingWorker<Void, Void>() {
                 @Override
                 public Void doInBackground() {
-                    try {
-                        LinkedList<Pair> pairs = agentSearch.getPairs();
-                        for (Pair p : pairs) {
-                            WarehouseState state = ((WarehouseState) agentSearch.getEnvironment()).clone();
-                            if (state.getLineAgent()!=p.getCell1().getLine() || state.getColumnAgent()!=p.getCell1().getColumn() )
-                                state.setCellAgent(p.getCell1().getLine(), p.getCell1().getColumn()+1);
-                            else
-                                state.setCellAgent(p.getCell1().getLine(), p.getCell1().getColumn());
-                            WarehouseProblemForSearch problem = new WarehouseProblemForSearch(state, p.getCell2());
-                            Solution s = agentSearch.solveProblem(problem);
-                            p.setValue((int) s.getCost());
-                        }
-                        problemGA = new WarehouseProblemForGA(agentSearch);
-
-
+                    try
+                    {
+                        RunSearch();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -424,8 +412,6 @@ public class MainFrame extends JFrame implements GAListener {
     }
 
     public void buttonRunExperiments_actionPerformed(ActionEvent e) {
-
-
         manageButtons(false, false, false, false, false, false, false, false);
         textFieldExperimentsStatus.setText("Running");
 
@@ -436,21 +422,7 @@ public class MainFrame extends JFrame implements GAListener {
                     int[][] matrix = WarehouseAgentSearch.readInitialStateFromFile(new File(experimentsFactory.getFile()));
                     WarehouseAgentSearch agentSearch = new WarehouseAgentSearch(new WarehouseState(matrix));
 
-                    LinkedList<Pair> pairs = agentSearch.getPairs();
-                    for (Pair p : pairs) {
-                        WarehouseState state = ((WarehouseState) agentSearch.getEnvironment()).clone();
-                        if (state.getLineAgent()!=p.getCell1().getLine() || state.getColumnAgent()!=p.getCell1().getColumn() )
-                            state.setCellAgent(p.getCell1().getLine(), p.getCell1().getColumn()+1);
-                        else
-                            state.setCellAgent(p.getCell1().getLine(), p.getCell1().getColumn());
-                        WarehouseProblemForSearch problem = new WarehouseProblemForSearch(state, p.getCell2());
-                        Solution s = agentSearch.solveProblem(problem);
-                        p.setValue((int) s.getCost());
-
-
-                    }
-                    problemGA = new WarehouseProblemForGA(agentSearch);
-
+                    RunSearch();
 
                     while (experimentsFactory.hasMoreExperiments()) {
                         try {
@@ -475,6 +447,27 @@ public class MainFrame extends JFrame implements GAListener {
             }
         };
         worker.execute();
+    }
+
+    private void RunSearch()
+    {
+        for (Object o : agentSearch.getPairs()) {
+            if (!(o instanceof Pair))
+                continue;
+
+            Pair p = (Pair)o;
+            WarehouseState state = ((WarehouseState) agentSearch.getEnvironment()).clone();
+            if (state.getLineAgent()!=p.getCell1().getLine() || state.getColumnAgent()!=p.getCell1().getColumn() )
+                state.setCellAgent(p.getCell1().getLine(), p.getCell1().getColumn()+1);
+            else
+                state.setCellAgent(p.getCell1().getLine(), p.getCell1().getColumn());
+            WarehouseProblemForSearch problem = new WarehouseProblemForSearch(state, p.getCell2());
+            Solution s = agentSearch.solveProblem(problem);
+            p.setValue((int) s.getCost());
+
+
+        }
+        problemGA = new WarehouseProblemForGA(agentSearch);
     }
 
     @Override

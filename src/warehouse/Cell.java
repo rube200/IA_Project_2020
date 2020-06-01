@@ -1,5 +1,7 @@
 package warehouse;
 
+import java.util.Objects;
+
 public class Cell {
     private final int line;
     private final int column;
@@ -11,12 +13,21 @@ public class Cell {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+
+        if (o == null || getClass() != o.getClass())
+            return false;
+
         Cell cell = (Cell) o;
-        return line == cell.line &&
-                column == cell.column;
+        return line == cell.line && column == cell.column;
     }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(line, column);
+    }
+
 
     @Override
     public String toString() {

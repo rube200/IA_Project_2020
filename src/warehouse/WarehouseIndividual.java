@@ -80,19 +80,17 @@ public class WarehouseIndividual extends IntVectorIndividual<WarehouseProblemFor
     }
 
     public double distance(Cell cell1, Cell cell2) {
-        LinkedList Pairs = problem.agentSearch.getPairs();
-        for (Object obj : Pairs) {
-            if (!(obj instanceof Pair))
-                continue;
-
-            Pair pair = (Pair) obj;
-            if (cell1.equals(pair.getCell1()) && cell2.equals(pair.getCell2()))
-                return pair.getValue();
+        Pair p = new Pair(cell1, cell2);
+        Integer distance = problem.pairs.get(p);
+        if (distance != null)
+            return distance;
 
 
-            if (cell1.equals(pair.getCell2()) && cell2.equals(pair.getCell1()))
-                return pair.getValue();
-        }
+        p = new Pair(cell2, cell1);//reverter pair cause by hash
+        distance = problem.pairs.get(p);
+        if (distance != null)
+            return distance;
+
 
         throw new IllegalArgumentException("Invalid cells");
     }
