@@ -25,6 +25,7 @@ public class PanelSimulation extends JPanel implements EnvironmentListener {
     final PanelInformation panelInformation = new PanelInformation();
     final JButton buttonSimulate = new JButton("Simulate Each Request");
     private int numRequest, numSteps;
+    private int currentCatchIndex;
 
     SwingWorker worker;
 
@@ -56,6 +57,7 @@ public class PanelSimulation extends JPanel implements EnvironmentListener {
             environmentPanel.repaint();
         }
         buttonSimulate.setEnabled(enabled);
+        currentCatchIndex = 0;
     }
 
 
@@ -112,9 +114,6 @@ public class PanelSimulation extends JPanel implements EnvironmentListener {
                 environment.getSize() * CELL_SIZE + 1,
                 BufferedImage.TYPE_INT_RGB);
     }
-
-    private int currentCatchIndex = 0;
-
 
     @Override
     public void environmentUpdated() {
