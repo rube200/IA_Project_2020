@@ -2,8 +2,10 @@ package warehouse;
 
 import ga.GeneticAlgorithm;
 import ga.IntVectorIndividual;
-import java.util.LinkedList;
+
 import java.util.List;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class WarehouseIndividual extends IntVectorIndividual<WarehouseProblemForGA, WarehouseIndividual> {
     public WarehouseIndividual(WarehouseProblemForGA problem, int size) {
@@ -40,23 +42,30 @@ public class WarehouseIndividual extends IntVectorIndividual<WarehouseProblemFor
     public double computeFitness() {
         fitness = 0;
         List<Request> requests = WarehouseAgentSearch.getRequests();
-        for (Request request : requests) {
-            int[] products = request.getRequest();
+        Lock lock = new ReentrantLock();
+        requests.parallelStream().forEach(req -> {
+            int[] products = req.getRequest();
             int lastIndex = products.length - 1;
+
+            int currentFitness = 0;
             for (int i = 0; i <= lastIndex; i++) {
                 int product = products[i];
                 if (i == 0) {
-                    fitness += distance(WarehouseAgentSearch.getCellAgent(), getShelfCell(product));
+                    currentFitness += distance(WarehouseAgentSearch.getCellAgent(), getShelfCell(product));
                 }
 
 
                 if (i == lastIndex) {
-                    fitness += distance(getShelfCell(product), WarehouseAgentSearch.getExit());
+                    currentFitness += distance(getShelfCell(product), WarehouseAgentSearch.getExit());
                 } else {
-                    fitness += distance(getShelfCell(product), getShelfCell(products[i + 1]));
+                    currentFitness += distance(getShelfCell(product), getShelfCell(products[i + 1]));
                 }
             }
-        }
+
+            lock.lock();
+            fitness += currentFitness;
+            lock.unlock();
+        });
         return fitness;
     }
 
