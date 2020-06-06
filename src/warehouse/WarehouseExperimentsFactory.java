@@ -27,6 +27,7 @@ public class WarehouseExperimentsFactory extends ExperimentsFactory {
     private Experiment<WarehouseExperimentsFactory, WarehouseProblemForGA> experiment;
     private String file;
 
+
     public WarehouseExperimentsFactory(File configFile) throws IOException {
         super(configFile);
         if (getParameterValue("Problem file") != null)
@@ -34,15 +35,16 @@ public class WarehouseExperimentsFactory extends ExperimentsFactory {
     }
 
     @Override
-    public Experiment buildExperiment(WarehouseAgentSearch agentSearch) throws IOException {
+    public Experiment buildExperiment(WarehouseAgentSearch agentSearch, boolean parallelWork) throws IOException {
         numRuns = Integer.parseInt(getParameterValue("Runs"));
         populationSize = Integer.parseInt(getParameterValue("Population size"));
         maxGenerations = Integer.parseInt(getParameterValue("Max generations"));
 
+
         //SELECTION 
         if (getParameterValue("Selection").equals("tournament")) {
             int tournamentSize = Integer.parseInt(getParameterValue("Tournament size"));
-            selection = new Tournament<>(populationSize, tournamentSize);
+            selection = new Tournament<>(populationSize, tournamentSize, parallelWork);
         }
 
         //RECOMBINATION

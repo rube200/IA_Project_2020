@@ -7,6 +7,8 @@ import ga.selectionMethods.SelectionMethod;
 import ga.selectionMethods.Tournament;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -21,7 +23,10 @@ public class PanelParameters extends PanelAtributesValue {
     public static final String TOURNAMENT_SIZE = "4";
     public static final String PROB_RECOMBINATION = "0.7";
     public static final String PROB_MUTATION = "0.2";
-    public static final String Velocity = "200";
+    public static final String VELOCITY = "200";
+    public static final boolean PARALLEL_WORK = true;
+
+
     private MainFrame mainFrame;
     JTextField textFieldSeed = new JTextField(SEED, TEXT_FIELD_LENGHT);
     JTextField textFieldN = new JTextField(POPULATION_SIZE, TEXT_FIELD_LENGHT);
@@ -41,7 +46,8 @@ public class PanelParameters extends PanelAtributesValue {
     String[] methodsSearch = {"A*"};
     JComboBox comboBoxSearch = new JComboBox(methodsSearch);
 
-    JTextField textFieldVelocity = new JTextField(Velocity, TEXT_FIELD_LENGHT);
+    JTextField textFieldVelocity = new JTextField(VELOCITY, TEXT_FIELD_LENGHT);
+    JCheckBox checkBoxParallel = new JCheckBox(null, null, PARALLEL_WORK);
 
 
     JRadioButton rbElitism = new JRadioButton("", true);
@@ -91,6 +97,10 @@ public class PanelParameters extends PanelAtributesValue {
         valueComponents.add(textFieldVelocity);
         textFieldVelocity.addKeyListener(new IntegerTextField_KeyAdapter(null));
 
+        labels.add(new JLabel("Parallel work: "));
+        valueComponents.add(checkBoxParallel);
+
+
         mainFrame.manageButtons(false, false, false, false,false, false, false, false);
 
         configure();
@@ -109,7 +119,8 @@ public class PanelParameters extends PanelAtributesValue {
             case 0:
                 return new Tournament<>(
                         Integer.parseInt(textFieldN.getText()),
-                        Integer.parseInt(textFieldTournamentSize.getText()));
+                        Integer.parseInt(textFieldTournamentSize.getText()),
+                        mainFrame.getPanelParameters().checkBoxParallel.isSelected());
         }
         return null;
     }

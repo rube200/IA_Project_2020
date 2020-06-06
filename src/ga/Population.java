@@ -24,19 +24,38 @@ public class Population<I extends Individual, P extends Problem<I>>{
         }
     }
 
-    public I evaluate() {
-        Lock lock = new ReentrantLock();
+    public I evaluate(boolean parallelWork) {
         best = getIndividual(0);
-        IntStream.range(0, individuals.length).parallel().forEach(i ->
+
+
+        if (parallelWork)
         {
-            individuals[i].computeFitness();
-            lock.lock();
-            if (individuals[i].compareTo(best) > 0) {
-                best = (I)individuals[i];
+            Lock lock = new ReentrantLock();
+            IntStream.range(0, individuals.length).parallel().forEach(i ->
+            {
+                individuals[i].computeFitness(true);
+                lock.lock();
+                CheckBest((I)individuals[i]);
+                lock.unlock();
+            });
+        }
+        else
+        {
+            for (Individual individual : individuals) {
+                individual.computeFitness(false);
+                CheckBest((I)individual);
             }
-            lock.unlock();
-        });
+        }
+
+
         return best;
+    }
+
+    private void CheckBest(I individual)
+    {
+        if (individual.compareTo(best) > 0) {
+            best = (I)individual;
+        }
     }
 
     public double getAverageFitness() {

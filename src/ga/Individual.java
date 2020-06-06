@@ -14,7 +14,7 @@ public abstract class Individual<P extends Problem, I extends Individual> implem
         this.fitness = original.fitness;
     }
 
-    public abstract double computeFitness();
+    public abstract double computeFitness(boolean parallelWork);
     
     public abstract int getNumGenes();
     

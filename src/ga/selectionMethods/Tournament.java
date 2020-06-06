@@ -11,14 +11,16 @@ import java.util.stream.IntStream;
 
 public class Tournament <I extends Individual, P extends Problem<I>> extends SelectionMethod<I, P> {
 
+    private boolean parallelWork;
     private int size;
 
-    public Tournament(int popSize) {
-        this(popSize, 2);
+    public Tournament(int popSize, boolean parallelWork) {
+        this(popSize, 2, parallelWork);
     }
 
-    public Tournament(int popSize, int size) {
+    public Tournament(int popSize, int size, boolean parallelWork) {
         super(popSize);
+        this.parallelWork = parallelWork;
         this.size = size;
     }
 
@@ -27,17 +29,43 @@ public class Tournament <I extends Individual, P extends Problem<I>> extends Sel
         Population<I, P> result = new Population<>(original.getSize());
 
 
-        int randomLengt = popSize * size;
-        int[] myRandom = new int[randomLengt];
-        for (int i = 0; i < popSize * size; i++)
-            myRandom[i] = GeneticAlgorithm.random.nextInt(popSize);
+        if (parallelWork)
+        {
+            int randomLengt = popSize * size;
+            int[] myRandom = new int[randomLengt];
+            for (int i = 0; i < popSize * size; i++)
+                myRandom[i] = GeneticAlgorithm.random.nextInt(popSize);
 
 
-        IntStream.range(0, popSize).parallel().forEach(i -> result.addIndividual(i, tournament(original, i, myRandom)));
+            IntStream.range(0, popSize).parallel().forEach(i -> result.addIndividual(i, tournament(original, i, myRandom)));
+        }
+        else
+        {
+            for (int i = 0; i < popSize; i++) {
+                result.addIndividual(i, tournament(original));
+            }
+        }
+
+
         return result;
     }
 
-    private I tournament(Population<I, P> population, int index, int[] myRandom ) {
+    private I tournament(Population<I, P> population) {
+        I best = population.getIndividual(GeneticAlgorithm.random.nextInt(popSize));
+
+
+        for (int i = 1; i < size; i++) {
+            I aux = population.getIndividual(GeneticAlgorithm.random.nextInt(popSize));
+            if (aux.compareTo(best) > 0) { //if aux is BETTER than best
+                best = aux;
+            }
+        }
+
+
+        return (I) best.clone();
+    }
+
+    private I tournament(Population<I, P> population, int index, int[] myRandom) {
         int initialRandomIndex = index * size;
         I best = population.getIndividual(myRandom[initialRandomIndex]);
 

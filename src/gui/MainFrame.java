@@ -277,7 +277,7 @@ public class MainFrame extends JFrame implements GAListener {
                 public Void doInBackground() {
                     try {
 
-                        bestInRun = ga.run(problemGA);
+                        bestInRun = ga.run(problemGA, panelParameters.checkBoxParallel.isSelected());
 
                     } catch (Exception e) {
                         e.printStackTrace(System.err);
@@ -429,10 +429,8 @@ public class MainFrame extends JFrame implements GAListener {
 
                     while (experimentsFactory.hasMoreExperiments()) {
                         try {
-
-                            Experiment experiment = experimentsFactory.nextExperiment(agentSearch);
-                            experiment.run();
-
+                            Experiment experiment = experimentsFactory.nextExperiment(agentSearch, panelParameters.checkBoxParallel.isSelected());
+                            experiment.run(panelParameters.checkBoxParallel.isSelected());
                         } catch (IOException e1) {
                             e1.printStackTrace(System.err);
                         }
@@ -446,13 +444,6 @@ public class MainFrame extends JFrame implements GAListener {
             @Override
             public void done() {
                 manageButtons(true, problemGA != null, false, false, false, true, false, false);
-                try {
-                    Desktop.getDesktop().browse(new URI("https://youtu.be/GWXLPu8Ky9k")); //TODO DELETE
-                } catch (IOException ioException) {
-                    ioException.printStackTrace();
-                } catch (URISyntaxException uriSyntaxException) {
-                    uriSyntaxException.printStackTrace();
-                }
                 textFieldExperimentsStatus.setText("Finished");
             }
         };

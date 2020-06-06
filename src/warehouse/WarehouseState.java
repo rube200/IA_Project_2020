@@ -31,6 +31,7 @@ public class WarehouseState extends State implements Cloneable {
         }
     }
 
+
     public void executeAction(Action action) {
         action.execute(this);
     }

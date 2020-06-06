@@ -39,34 +39,59 @@ public class WarehouseIndividual extends IntVectorIndividual<WarehouseProblemFor
     }
 
     @Override
-    public double computeFitness() {
+    public double computeFitness(boolean parallelWork) {
         fitness = 0;
         List<Request> requests = WarehouseAgentSearch.getRequests();
-        Lock lock = new ReentrantLock();
-        requests.parallelStream().forEach(req -> {
-            int[] products = req.getRequest();
-            int lastIndex = products.length - 1;
-
-            int currentFitness = 0;
-            for (int i = 0; i <= lastIndex; i++) {
-                int product = products[i];
-                if (i == 0) {
-                    currentFitness += distance(WarehouseAgentSearch.getCellAgent(), getShelfCell(product));
-                }
 
 
-                if (i == lastIndex) {
-                    currentFitness += distance(getShelfCell(product), WarehouseAgentSearch.getExit());
-                } else {
-                    currentFitness += distance(getShelfCell(product), getShelfCell(products[i + 1]));
-                }
+        if (parallelWork)
+        {
+            Lock lock = new ReentrantLock();
+            requests.parallelStream().forEach(req -> {
+                int[] products = req.getRequest();
+                int lastIndex = products.length - 1;
+                int currentFitness = computeFitnessPerRequest(products, lastIndex);
+
+
+                lock.lock();
+                fitness += currentFitness;
+                lock.unlock();
+            });
+        }
+        else
+        {
+            for (Request request : requests) {
+                int[] products = request.getRequest();
+                int lastIndex = products.length - 1;
+                fitness += computeFitnessPerRequest(products, lastIndex);
+            }
+        }
+
+
+        return fitness;
+    }
+
+    private int computeFitnessPerRequest(int[] products, int lastIndex)
+    {
+        int currentFitness = 0;
+
+
+        for (int i = 0; i <= lastIndex; i++) {
+            int product = products[i];
+            if (i == 0) {
+                currentFitness += distance(WarehouseAgentSearch.getCellAgent(), getShelfCell(product));
             }
 
-            lock.lock();
-            fitness += currentFitness;
-            lock.unlock();
-        });
-        return fitness;
+
+            if (i == lastIndex) {
+                currentFitness += distance(getShelfCell(product), WarehouseAgentSearch.getExit());
+            } else {
+                currentFitness += distance(getShelfCell(product), getShelfCell(products[i + 1]));
+            }
+        }
+
+
+        return currentFitness;
     }
 
     public int getProductInShelf(int line, int column) {

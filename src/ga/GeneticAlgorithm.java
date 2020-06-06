@@ -37,10 +37,10 @@ public class GeneticAlgorithm<I extends Individual, P extends Problem<I>> {
         this.mutation = mutation;
     }
 
-    public I run(P problem) {
+    public I run(P problem, boolean parallelWork) {
         t = 0;
         population = new Population<>(populationSize, problem);
-        bestInRun = population.evaluate();
+        bestInRun = population.evaluate(parallelWork);
         fireGenerationEnded(new GAEvent(this));
 
         while (!stopCondition(t)) {
@@ -48,7 +48,7 @@ public class GeneticAlgorithm<I extends Individual, P extends Problem<I>> {
             recombination.run(populationAux);
             mutation.run(populationAux);
             population =  populationAux;
-            I bestInGen = population.evaluate();
+            I bestInGen = population.evaluate(parallelWork);
             computeBestInRun(bestInGen);
             t++;
             fireGenerationEnded(new GAEvent(this));

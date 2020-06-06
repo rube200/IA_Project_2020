@@ -27,7 +27,7 @@ public abstract class ExperimentsFactory {
         readStatisticsFile(configFile);
     }
 
-    protected abstract Experiment buildExperiment(WarehouseAgentSearch agentSearch) throws IOException;
+    protected abstract Experiment buildExperiment(WarehouseAgentSearch agentSearch, boolean parallelWork) throws IOException;
 
     public abstract GeneticAlgorithm generateGAInstance(int seed);
 
@@ -35,9 +35,9 @@ public abstract class ExperimentsFactory {
         return orderedParametersVector[0].activeValueIndex < orderedParametersVector[0].getNumberOfValues();
     }
 
-    public Experiment nextExperiment(WarehouseAgentSearch agentSearch) throws IOException {
+    public Experiment nextExperiment(WarehouseAgentSearch agentSearch, boolean parallelWork) throws IOException {
         if (hasMoreExperiments()) {
-            Experiment experiment = buildExperiment(agentSearch);
+            Experiment experiment = buildExperiment(agentSearch, parallelWork);
             indicesManaging(orderedParametersVector.length - 1);
             return experiment;
         }
