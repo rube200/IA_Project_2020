@@ -25,7 +25,7 @@ public class Recombination2<I extends IntVectorIndividual, P extends Problem<I>>
 
 
         int[] child1 = recombineParent(ind1, ind2, cut1, cut2);
-        int[] child2 = recombineParent(ind1, ind1, cut1, cut2);
+        int[] child2 = recombineParent(ind2, ind1, cut1, cut2);
 
 
         for (int i = 0; i < ind1.getNumGenes(); i++) {
